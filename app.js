@@ -1,17 +1,26 @@
 const express=require('express');
-
 const app=express();
-
+const mongoose=require('mongoose');
+const Blog=require('./blogs');
+const { buildErrorMessage } = require('vite');
 app.set('view engine','ejs'); 
+
+//middleware and static files
+ app.use(express.static('public'));
+ mongoose.connect('mongodb://localhost:27017/node-tut')
+ .then((result)=> app.listen(3000))
+ .catch((err)=>console.log(err));
+
+ 
 
 
 app.get('/',(req,res)=>{
-    const Blogs=[
-        {title:"Day-1",snippet: "Hlo this is aman hlo this is aman"},
-        {title:"Day-2",snippet: "Hlo this is aman hlo this is aman"},
-        {title:"Day-3",snippet: "Hlo this is aman hlo this is aman"}
-    ]
-    res.render('index',{title : 'Home', Blogs});
+   Blog.find().sort({createdAt : -1})
+   .then((result)=>{
+      res.render('index',{title:'All-Blogs',Blogs:result});
+   }).catch((err)=>{
+    console.log(err);
+   })
 })
 
 
@@ -40,4 +49,3 @@ app.use((req,res)=>{
 //     res.redirect('/about');
 // })
 
-app.listen(3000);
