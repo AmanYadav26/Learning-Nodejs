@@ -4,12 +4,14 @@
 <body>
    <%- include ('./partials/nav.ejs') %>
 
-    <div class="blogs-content">
+    <div class="blogs content">
         <h2>All Blogs</h2>
         <% if(Blogs.length > 0) { %>
           <% Blogs.forEach(blog =>{ %>
+            <a class="single" href="/blogs/<%= blog._id %>">
               <h3><%= blog.title %></h3>
               <p><%= blog.snippet %></p>
+            </a>
          <% }) %>
         <% } else { %>
             <p>There is no blogs to display...</p>
